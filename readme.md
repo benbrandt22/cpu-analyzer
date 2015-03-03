@@ -1,20 +1,19 @@
 #Cpu analyzer
-forked from Sam Saffron's code which seems adandoned, see: http://samsaffron.com/archive/2009/11/11/Diagnosing+runaway+CPU+in+a+Net+production+application
+forked from jitbit's code, see: https://github.com/jitbit/cpu-analyzer
 
-All required dependencies are now added via NuGET, no need to link MS libraried.
+Updated the command line parameter structure to allow multiple processes. If the system has multiple processes of the same name, all instances will be analyzed.
 
 Usage:
 
-`cpu-analyzer ProcessName|PID [options]`
+`cpu-analyzer -p ProcessName|PID [options]`
 
-/S indicates how many samples to take (default:10)
+-s indicates how many samples to take (default:10)
 
-/I the interval between samples in milliseconds (default:1000)
+-i the interval between samples in milliseconds (default:1000)
 
-Example: `cpu-analyzer w3wp.exe /s 60 /i 500` - "Take 60 samples once every 500 milliseconds"
+Example: `cpu-analyzer -p w3wp -s 60 -i 500` - "Take 60 samples once every 500 milliseconds for all processes named 'w3wp'"
 
 The tool output can be quite lengthy, so use it like this:
 
-`cpu-analyser.exe w3wp.exe >> log.txt`
+`cpu-analyzer.exe w3wp >> log.txt`
 
-We used this tool many times to successfully find CPU "leaks" in our [helpdesk app](https://www.jitbit.com/web-helpdesk/) on production server, which has hundreds of background threads.

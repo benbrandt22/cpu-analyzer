@@ -56,8 +56,14 @@ namespace cpu_analyzer {
 
             snapshot.Id = thread.Id;
 
-            long creation, exit, kernel, user;
-            GetThreadTimes(thread.CorThread.Handle, out creation, out exit, out kernel, out user);
+            long creation = 0, exit = 0, kernel = 0, user = 0;
+            
+            try {
+                GetThreadTimes(thread.CorThread.Handle, out creation, out exit, out kernel, out user); 
+            }
+            catch (Exception ex) {
+                Console.WriteLine(" Exception on GetThreadTimes for thread ID {0} : {1}", thread.Id, ex);
+            }
 
             snapshot.KernelTime = kernel;
             snapshot.UserTime = user;

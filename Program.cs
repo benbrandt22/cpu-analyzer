@@ -77,14 +77,21 @@ namespace cpu_analyzer {
 
             for (int i = 0; i < sampling.Samples; i++) {
                 foreach (MDbgThread thread in attached.Threads) {
-                    var snapshot = ThreadSnapshot.GetThreadSnapshot(thread);
-                    List<ThreadSnapshot> snapshots;
-                    if (!stats.TryGetValue(snapshot.Id, out snapshots)) {
-                        snapshots = new List<ThreadSnapshot>();
-                        stats[snapshot.Id] = snapshots;
-                    }
+                    try {
+                        var snapshot = ThreadSnapshot.GetThreadSnapshot(thread);
+                        List<ThreadSnapshot> snapshots;
+                        if (!stats.TryGetValue(snapshot.Id, out snapshots))
+                        {
+                            snapshots = new List<ThreadSnapshot>();
+                            stats[snapshot.Id] = snapshots;
+                        }
 
-                    snapshots.Add(snapshot);
+                        snapshots.Add(snapshot);
+                    }
+                    catch (Exception ex) {
+                        Console.WriteLine("Exception getting sample #{0} from PID {1} : {2}", i, sampling.Pid, ex.ToString());
+                    }
+                    
                 }
 
                 attached.Go();
